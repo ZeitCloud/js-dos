@@ -137,7 +137,13 @@
   const messages = document.getElementById('messages');
   const form = document.getElementById('ask');
   const input = document.getElementById('prompt');
-  const apiKey = (window.electronAPI && window.electronAPI.apiKey) || '';
+  let apiKey = (window.electronAPI && window.electronAPI.apiKey) || localStorage.getItem('OPENAI_API_KEY') || '';
+  if (!apiKey) {
+    apiKey = window.prompt('Enter your OpenAI API key:');
+    if (apiKey) {
+      localStorage.setItem('OPENAI_API_KEY', apiKey);
+    }
+  }
 
   async function ask(text) {
     if (!apiKey) return;

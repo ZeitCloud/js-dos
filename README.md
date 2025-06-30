@@ -58,6 +58,29 @@ cp -rv node_modules/emulators/dist/* public/emulators
 ```
 2. Run `yarn run vite` and open [http://localhost:3000](http://localhost:3000) js-dos is ready!
 
+## Particle Clock desktop app
+
+The repository includes a small Electron-based clock with ChatGPT integration.
+
+### Run in development
+
+```
+npm install
+npm start
+```
+
+The first run will ask for your OpenAI API key and store it locally.
+
+### Package a Windows executable
+
+Install `electron-packager` and build:
+
+```
+npx electron-packager . ParticleClock --platform=win32 --arch=x64 --out dist
+```
+
+The resulting `.exe` can be found under `dist/ParticleClock-win32-x64/`.
+
 ## Community
 
 * [DOS.Zone](https://dos.zone)
