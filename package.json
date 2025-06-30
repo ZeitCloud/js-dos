@@ -21,7 +21,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "electron ."
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
@@ -37,6 +38,7 @@
     "@typescript-eslint/parser": "^6.20.0",
     "autoprefixer": "^10.4.17",
     "daisyui": "^3.9.3",
+    "electron": "^37.1.0",
     "emulators": "8.3.9",
     "eslint": "^8.56.0",
     "eslint-config-google": "^0.14.0",

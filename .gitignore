@@ -25,3 +25,6 @@ dist-ssr
 
 public/emulators
 *.zip
+.pnp.cjs
+.pnp.loader.mjs
+.yarn/
