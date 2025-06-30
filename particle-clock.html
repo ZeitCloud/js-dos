@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Particle Clock</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<canvas id="clock"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('clock');
+  const ctx = canvas.getContext('2d');
+  const off = document.createElement('canvas');
+  const offCtx = off.getContext('2d');
+  let width, height;
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+    off.width = width;
+    off.height = height;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const particles = [];
+  function createParticles(text) {
+    offCtx.clearRect(0, 0, width, height);
+    const fontSize = Math.min(width / 5, height / 2);
+    offCtx.font = `${fontSize}px monospace`;
+    offCtx.textAlign = 'center';
+    offCtx.textBaseline = 'middle';
+    offCtx.fillStyle = '#fff';
+    offCtx.fillText(text, width / 2, height / 2);
+    const data = offCtx.getImageData(0, 0, width, height).data;
+    particles.length = 0;
+    for (let y = 0; y < height; y += 6) {
+      for (let x = 0; x < width; x += 6) {
+        const index = (y * width + x) * 4 + 3;
+        if (data[index] > 128) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            tx: x,
+            ty: y
+          });
+        }
+      }
+    }
+  }
+
+  function update() {
+    ctx.clearRect(0, 0, width, height);
+    for (const p of particles) {
+      p.x += (p.tx - p.x) * 0.1;
+      p.y += (p.ty - p.y) * 0.1;
+      ctx.fillStyle = '#0f0';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    requestAnimationFrame(update);
+  }
+
+  function formatTime(date) {
+    let h = date.getHours();
+    const m = date.getMinutes();
+    const s = date.getSeconds();
+    const am = h >= 12 ? 'PM' : 'AM';
+    h = h % 12;
+    h = h ? h : 12;
+    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')} ${am}`;
+  }
+
+  function tick() {
+    const text = formatTime(new Date());
+    createParticles(text);
+  }
+
+  tick();
+  setInterval(tick, 1000);
+  update();
+})();
+</script>
+</body>
+</html>
